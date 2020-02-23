@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+
+    <div><span><i></i></span>
+    
+            <strong></strong>
+        <ul></ul>    
+        </div>
+
+
+    <script>
+
+        var div = document.getElementsByTagName('div')[0];
+        var span = document.getElementsByTagName('span')[0];
+        
+        var ol = document.createElement('ol');
+
+    </script>
+
+
+    <script>
+
+        function Dog(name, breed) {
+            this.name = name;
+            this.breed = breed;
+        }
+
+        var wangcai = new Dog('wangcai', 'ShibaInu');
+        var laifu = new Dog('laifu', 'TuGou');
+
+    // console.log(Dog.prototype);
+    // console.log(wangcai.__proto__);
+    // console.log(Dog.prototype === wangcai.__proto__);
+
+    // console.log(Dog.prototype.constructor);
+    // console.log(wangcai.constructor);
+    // console.log(Dog.prototype.constructor === wangcai.constructor);
+
+    </script>
+
+    <script>
+
+        Grand.prototype.lastName = 'Li';
+        function Grand() {
+
+        }
+
+        var grand = new Grand();
+
+        Father.prototype = grand;
+        function Father() {
+            this.name = 'bai';
+            this.composition = {
+                No1: '侠客行'
+            }
+        }
+
+        var father = new Father();
+
+        Son.prototype = father;
+        function Son() {
+            this.hobbit = 'compose';
+        }
+
+        var son = new Son();
+
+
+        // console.log(son.lastName);
+        son.composition.No1 = '将进酒';  // 引用值修改
+        son.composition.No2 = '蜀道难';  // 引用值添加
+        // console.log(son.composition);
+        // console.log(father.composition);
+
+
+    </script>
+
+    <script>
+
+        function inherit(Target, Origin) {
+            function Fn() { }
+            Fn.prototype = Origin.prototype;
+            Target.prototype = new Fn();
+            // Target.prototype.constructor = Target;
+            // 防止new Target()生成的对象的constructor指向紊乱
+
+            // Target.prototype.uber = Origin.prototype;
+            // 可以人为标记Target真正继承的是Origin，而不是中间层的Fn
+        }
+
+        Father.prototype.lastName = 'Li';
+        function Father() { }
+        function Son() { }
+
+        inherit(Son, Father);
+        var son = new Son();
+        var father = new Father();
+
+        Son.prototype.key = 1;
+        // console.log(son.key);  // value
+        // console.log(father.key);  // undefined
+
+        // console.log(son.__proto__);
+
+    </script>
+
+    <script>
+
+        var inherit = (function () {
+            var Fn = function () { };
+            return function (Target, Origin) {
+                Fn.prototype = Origin.prototype;
+                Target.prototype = new Fn();
+                Target.prototype.constructor = Target;
+                Target.prototype.uber = Origin.prototype;
+            }
+        }());
+
+    </script>
+
+    <script>
+
+
+
+        function deepClone(origin, target) {
+            var target = target || {},
+                toStr = Object.prototype.toString,
+                arrStr = "[object Array]";
+
+            for (var key in origin) {
+                if (origin.hasOwnProperty(key)) {
+
+                    // 判断是不是引用类型
+                    if (origin[key] !== null && typeof (origin[key]) == 'object') {
+                        // 判断是数组还是对象
+                        if (toStr.call(origin[key]) == arrStr) {
+                            target[key] = [];
+                        } else {
+                            target[key] = {};
+                        }
+                        // 递归，循环判断引用类型里的值类型
+                        deepClone(origin[key], target[key]);
+                    } else {
+                        // 递归出口，原始值类型拷贝
+                        target[key] = origin[key];
+                    }
+
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        var obj = {
+            "0": 'a',
+            "1": 'b',
+            "2": 'c',
+            "length": 3,
+            "push": Array.prototype.push,
+            "splice": Array.prototype.splice  // 有了这个，外形就和数组一样了
+        }
+
+        console.log(obj);
+
+        function test() {
+            console.log(arguments);
+        }
+        test(1, 2, 2, 2, 2);
+
+
+
+
+
+        function type(target) {
+
+            if (target === null) {
+                return 'null';
+            }
+
+            if (typeof (target) == 'object') {
+                return Object.prototype.toString.call(target);
+            } else {
+                return typeof (target);
+            }
+
+        }
+
+
+        Array.prototype.unique = function () {
+            var temp = {};
+            var arr = [];
+            for (var i = 0; i < this.length; i++) {
+                if (temp[this[i]] === undefined) {
+                    temp[this[i]] = 'abc';
+                    arr.push(this[i]);
+                }
+            }
+            return arr;
+        }
+
+        var a = [1, 1, 3, 3, 3, 1, 1, null, 1, 2, 2, 2, null, 2, 3, 1, 1];
+        console.log(a.unique());
+
+
+
+
+
+
+
+        String.prototype.unique = function () {
+            var arr = this.split("");
+            return arr.unique().join("");
+        }
+
+
+
+
+        var obj = {
+        name: 'asd',
+        arr: [1,2,[3,4]],
+        ooo: {
+            length : 10,
+            un : null,
+            abc : [2,2,2]
+        }
+    }
+
+    var res = JSON.parse(JSON.stringify(obj));
+    console.log(res);
+
+    </script>
+
+
+</body>
+
+</html>
